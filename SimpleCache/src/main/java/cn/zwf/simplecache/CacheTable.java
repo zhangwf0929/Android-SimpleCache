@@ -10,8 +10,8 @@ public class CacheTable implements CacheColumns {
         return "CREATE TABLE "
                 + TAB_NAME + " ( "
                 + COLUMN_ID + " INTEGER PRIMARY KEY, "
-                + COLUMN_INDEX + " TEXT UNIQUE, "
-                + COLUMN_CONTENT + " TEXT"
+                + COLUMN_KEY + " TEXT UNIQUE, "
+                + COLUMN_VALUE + " TEXT"
                 + " );"
                 ;
     }

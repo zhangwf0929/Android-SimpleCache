@@ -1,10 +1,8 @@
-package cn.zwf.lib.cache;
+package cn.zwf.simplecache;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;
 import android.util.Log;
-
-import cn.zwf.simplecache.CacheManager;
 
 /**
  * <a href="http://d.android.com/tools/testing/testing_android.html">Testing Fundamentals</a>

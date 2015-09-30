@@ -8,6 +8,6 @@ package cn.zwf.simplecache;
 public interface CacheColumns {
     String TAB_NAME = "cache";
     String COLUMN_ID = "_id";
-    String COLUMN_INDEX = "cache_index";
-    String COLUMN_CONTENT = "cache_content";
+    String COLUMN_KEY = "key";
+    String COLUMN_VALUE = "value";
 }

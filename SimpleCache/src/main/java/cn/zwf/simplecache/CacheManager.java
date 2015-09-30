@@ -55,10 +55,10 @@ public class CacheManager implements CacheColumns {
 
     public String getValue(String key) {
         String result = null;
-        Cursor cursor = mDb.query(TAB_NAME, null, COLUMN_INDEX + " ='" + key + "'", null, null, null, null);
+        Cursor cursor = mDb.query(TAB_NAME, null, COLUMN_KEY + " ='" + key + "'", null, null, null, null);
         if (cursor != null && cursor.getCount() > 0) {
             cursor.moveToFirst();
-            result = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_CONTENT));
+            result = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_VALUE));
         }
         closeCursor(cursor);
         return result;
@@ -66,13 +66,13 @@ public class CacheManager implements CacheColumns {
 
     public synchronized void setValue(String key, String value) {
         ContentValues values = new ContentValues();
-        values.put(COLUMN_INDEX, key);
-        values.put(COLUMN_CONTENT, value);
+        values.put(COLUMN_KEY, key);
+        values.put(COLUMN_VALUE, value);
         mDb.replace(TAB_NAME, null, values);
     }
 
     public synchronized int delValue(String key) {
-        return mDb.delete(TAB_NAME, COLUMN_INDEX + " ='" + key + "'", null);
+        return mDb.delete(TAB_NAME, COLUMN_KEY + " ='" + key + "'", null);
     }
 
     private void checkCacheSize() {
@@ -81,7 +81,7 @@ public class CacheManager implements CacheColumns {
             // 将缓存减半
             cursor.moveToPosition(mMaxRecordSize / 2);
             int id = cursor.getInt(cursor.getColumnIndex(COLUMN_ID));
-            mDb.delete(TAB_NAME, COLUMN_INDEX + " <'" + id + "'", null);
+            mDb.delete(TAB_NAME, COLUMN_KEY + " <'" + id + "'", null);
         }
         closeCursor(cursor);
     }
