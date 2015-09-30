@@ -6,7 +6,6 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 /**
  * DBHelper
- * <p/>
  * Created by ZhangWF(zhangwf0929@gmail.com) on 15/6/1.
  */
 public class CacheDatabaseHelper extends SQLiteOpenHelper implements CacheColumns {
@@ -14,10 +13,9 @@ public class CacheDatabaseHelper extends SQLiteOpenHelper implements CacheColumn
     private CacheTable table = new CacheTable();
 
     private static final String NAME = "simple_cache.db";
-    private static final int VERSION = 1;
 
-    public CacheDatabaseHelper(Context context) {
-        super(context, NAME, null, VERSION);
+    public CacheDatabaseHelper(Context context, int version) {
+        super(context, NAME, null, version);
     }
 
     @Override

@@ -2,7 +2,6 @@ package cn.zwf.simplecache;
 
 /**
  * Create DBTable's script
- * <p/>
  * Created by ZhangWF(zhangwf0929@gmail.com) on 15/6/1.
  */
 public class CacheTable implements CacheColumns {

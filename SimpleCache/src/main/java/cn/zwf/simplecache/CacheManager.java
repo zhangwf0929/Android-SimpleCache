@@ -9,7 +9,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * CacheManager's api
- * <p/>
  * Created by ZhangWF(zhangwf0929@gmail.com) on 15/6/1.
  */
 public class CacheManager implements CacheColumns {
@@ -20,20 +19,25 @@ public class CacheManager implements CacheColumns {
 
     private static int mMaxRecordSize = 500;
     private static CacheManager sCacheManager = null;
+    private static final int DEF_VERSION = 1;
 
     public static synchronized CacheManager getInstance() {
         return sCacheManager;
     }
 
-    private CacheManager(Context context) {
-        CacheDatabaseHelper helper = new CacheDatabaseHelper(context);
+    private CacheManager(Context context, int version) {
+        CacheDatabaseHelper helper = new CacheDatabaseHelper(context, version);
         mDb = helper.getWritableDatabase();
         checkCacheSize();
     }
 
     public static void init(Context context) {
+        init(context, DEF_VERSION);
+    }
+
+    public static void init(Context context, int version) {
         if (sCacheManager == null) {
-            sCacheManager = new CacheManager(context.getApplicationContext());
+            sCacheManager = new CacheManager(context.getApplicationContext(), version);
         }
     }
 
@@ -75,13 +79,17 @@ public class CacheManager implements CacheColumns {
         return mDb.delete(TAB_NAME, COLUMN_KEY + " ='" + key + "'", null);
     }
 
+    public synchronized int empty() {
+        return mDb.delete(TAB_NAME, "1=1", null);
+    }
+
     private void checkCacheSize() {
         Cursor cursor = mDb.query(TAB_NAME, new String[]{COLUMN_ID}, null, null, null, null, null);
         if (cursor != null && mMaxRecordSize > 0 && cursor.getCount() > mMaxRecordSize) {
             // 将缓存减半
             cursor.moveToPosition(mMaxRecordSize / 2);
             int id = cursor.getInt(cursor.getColumnIndex(COLUMN_ID));
-            mDb.delete(TAB_NAME, COLUMN_KEY + " <'" + id + "'", null);
+            mDb.delete(TAB_NAME, COLUMN_ID + " <'" + id + "'", null);
         }
         closeCursor(cursor);
     }
