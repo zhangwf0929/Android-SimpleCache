@@ -1,2 +1,2 @@
 # Android-SimpleCache
-simple cache by key-value on android
+A simple cache by key-value for Android
