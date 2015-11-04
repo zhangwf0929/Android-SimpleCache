@@ -4,7 +4,12 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.text.TextUtils;
 
+import com.google.gson.Gson;
+
+import java.lang.reflect.Type;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -68,11 +73,31 @@ public class CacheManager implements CacheColumns {
         return result;
     }
 
-    public synchronized void setValue(String key, String value) {
+    public <T> T getObject(String key, Class<T> cls) {
+        String value = getValue(key);
+        if (!TextUtils.isEmpty(value)) {
+            return new Gson().fromJson(value, cls);
+        }
+        return null;
+    }
+
+    public <T> List<T> getList(String key, Type type) {
+        String value = getValue(key);
+        if (!TextUtils.isEmpty(value)) {
+            return new Gson().fromJson(value, type);
+        }
+        return null;
+    }
+
+    public synchronized long setValue(String key, String value) {
         ContentValues values = new ContentValues();
         values.put(COLUMN_KEY, key);
         values.put(COLUMN_VALUE, value);
-        mDb.replace(TAB_NAME, null, values);
+        return mDb.replace(TAB_NAME, null, values);
+    }
+
+    public synchronized long setObject(String key, Object object) {
+        return setValue(key, new Gson().toJson(object));
     }
 
     public synchronized int delValue(String key) {

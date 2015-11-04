@@ -6,6 +6,11 @@ import android.text.TextUtils;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.gson.reflect.TypeToken;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -94,6 +99,45 @@ public class MainActivity extends AppCompatActivity {
             toast("no value");
         } else {
             toast(String.format("empty successful,del %d records", rows));
+        }
+    }
+
+    @OnClick(R.id.btn_set_object)
+    void setObject() {
+        User user = new User(1, "user01");
+        CacheManager.getInstance().setObject("object", user);
+    }
+
+    @OnClick(R.id.btn_get_object)
+    void getObject() {
+        User user = CacheManager.getInstance().getObject("object", User.class);
+        if (user != null) {
+            toast(user.name);
+        } else {
+            toast("nothing");
+        }
+    }
+
+    @OnClick(R.id.btn_set_list)
+    void setList() {
+        List<User> users = new ArrayList<>();
+        users.add(new User(1, "user01"));
+        users.add(new User(2, "user02"));
+        CacheManager.getInstance().setObject("list", users);
+    }
+
+    @OnClick(R.id.btn_get_list)
+    void getList() {
+        List<User> users = CacheManager.getInstance().getList("list", new TypeToken<List<User>>() {
+        }.getType());
+        if (users != null) {
+            StringBuilder sb = new StringBuilder("users:");
+            for (User user : users) {
+                sb.append("\n").append(user.name);
+            }
+            toast(sb.toString());
+        } else {
+            toast("nothing");
         }
     }
 
